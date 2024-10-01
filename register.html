@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Register</title>
+</head>
+<body>
+    <div class="card-login">
+        <p>Cadastre-se Aqui</p>
+        <form id="registerForm" enctype="multipart/form-data">
+            <label for="nome">Nome completo:</label>
+            <input type="text" id="nome" name="nome" required><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required><br><br>
+            <label for="confirmarsenha">Confirme a Senha:</label>
+            <input type="password" id="confirmarsenha" name="confirmarsenha" required><br><br>
+            <label for="foto">Foto de perfil:</label>
+            <input type="file" id="foto" name="foto" accept="image/*"><br><br>
+            <input type="submit" value="Cadastrar">
+        </form>
+        <p id="statusMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const confirmarsenha = document.getElementById('confirmarsenha').value;
+            const fotoInput = document.getElementById('foto').files[0];
+            const statusMessage = document.getElementById('statusMessage');
+
+            if (senha !== confirmarsenha) {
+                statusMessage.textContent = "As senhas não coincidem!";
+                statusMessage.style.color = "red";
+                return;
+            }
+
+            // Criar um FormData para enviar dados do formulário e a foto
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('email', email);
+            formData.append('senha', senha);
+            formData.append('foto', fotoInput);
+
+            try {
+                const response = await fetch('http://localhost:3000/usuarios', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusMessage.textContent = "Usuário cadastrado com sucesso!";
+                    statusMessage.style.color = "green";
+
+                    // Redirecionar para a página de login após o cadastro bem-sucedido
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500); // Redireciona após 1.5 segundos para dar tempo de exibir a mensagem
+                } else {
+                    statusMessage.textContent = data.erro || "Erro ao cadastrar usuário";
+                    statusMessage.style.color = "red";
+                }
+            } catch (error) {
+                statusMessage.textContent = "Erro de conexão com o servidor";
+                statusMessage.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

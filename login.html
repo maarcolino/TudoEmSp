@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="./index.html">
+                <img src="./logo.png" alt="Tudo em SP">
+            </a>
+        </div>
+
+
+        <button id="search-button">🔍</button>
+        <div id="search-input" style="display: none;">
+            <input type="text" id="search-text" placeholder="Digite sua pesquisa...">
+            <button id="search-submit">Enviar</button>
+        </div>
+
+
+
+        <nav>
+            <input type="checkbox" id="check">
+            <label for="check">&#9776;</label>
+            <ul>
+                <li><a href="./parques.html">Parques</a></li>
+                <li><a href="./pracas.html">Praças</a></li>
+                <li><a href="./eventos.html">Eventos</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Explorar &#9660; </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="./aquario.html">Aquários</a></li>
+                        <li><a href="./sesc.html">Sesc</a></li>
+                        <li><a href="./shopping.html">Shopping</a></li>
+                        <li><a href="./zoologico.html">Zoológico</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle"><img src="./pngwing.com.png" alt="ícone" id="fotoperfil" class="profile-pic"></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="./login.html">Login</a></li>
+                        <li><a href="./register.html">Register</a></li>
+                    </ul>
+                </li>
+
+                </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="card-login">
+        <p>Digite o seu acesso</p>
+        <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required><br><br>
+            <input type="submit" value="Entrar">
+            <p class="register">Já possui uma conta? Se não, clique abaixo para se cadastrar <a href="register.html"> <br>Cadastra-se</a></p>
+        </form>
+
+        <!-- Mensagem de status e foto do perfil -->
+        <p id="status-message"></p>
+        <img id="perfil-photo" src="" alt="Foto de Perfil"
+            style="display: none; width: 100px; height: 100px; border-radius: 50%;">
+    </div>
+
+    <!-- Script para lidar com o envio do formulário -->
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Impede o comportamento padrão de envio do formulário
+
+            // Pega os valores dos campos de email e senha
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            // Elemento para exibir mensagens de status (sucesso ou erro)
+            let statusMessage = document.getElementById('status-message');
+            let perfilPhoto = document.getElementById('perfil-photo');
+            statusMessage.textContent = 'Processando...';
+            statusMessage.style.color = 'black';
+
+            // Preparar os dados para enviar ao backend
+            const loginData = {
+                email: email,
+                senha: senha
+            };
+
+            try {
+                // Enviar uma requisição POST para o backend com as credenciais de login
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData) // Converte o objeto para JSON
+                });
+
+                // Pega a resposta do backend
+                const data = await response.json();
+
+                // Se o login for bem-sucedido
+                if (response.ok) {
+                    statusMessage.textContent = 'Login bem-sucedido!';
+                    statusMessage.style.color = 'green';
+
+                    // Definir a URL da foto do perfil e exibi-la
+                    perfilPhoto.src = data.fotoPerfil;
+                    perfilPhoto.style.display = 'block';
+
+                    // Redireciona para a página inicial após o login
+                    setTimeout(() => {
+                        window.location.replace('index.html?foto='+data.fotoPerfil); // Alterar o destino conforme necessário
+                    }, 1500);
+                } else {
+                    // Se houver erro no login
+                    statusMessage.textContent = data.erro || 'Erro no login. Verifique suas credenciais.';
+                    statusMessage.style.color = 'red';
+                }
+            } catch (error) {
+                // Se houver erro na conexão com o servidor
+                statusMessage.textContent = 'Erro de conexão com o servidor';
+                statusMessage.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+
+</html>

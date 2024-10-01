@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tudo em SP</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+          <a href="./index.html " id="pagindex">
+              <img src="./logo.png" alt="Tudo em SP">
+          </a>
+        </div>
+    
+        <button id="search-button">🔍</button>
+        <div id="search-input" style="display: none;">
+          <input type="text" id="search-text" placeholder="Digite sua pesquisa...">
+          <button id="search-submit">Enviar</button>
+        </div>
+    
+        <nav>
+          <input type="checkbox" id="check">
+          <label for="check">&#9776;</label>
+          <ul>
+            <li><a href="./parques.html" id="pagparques">Parques</a></li>
+            <li><a href="./pracas.html" id="pagpracas">Praças</a></li>
+            <li><a href="./eventos.html" id="pageventos">Eventos</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">Explorar &#9660;</a>
+              <ul class="dropdown-menu">
+                <li><a href="./aquario.html" id="pagaquario">Aquários</a></li>
+                <li><a href="./sesc.html" id="pagsesc">Sesc</a></li>
+                <li><a href="./shopping.html" id="pagshopping">Shopping</a></li>
+                <li><a href="./zoologico.html" id="pagzoologico">Zoológico</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">
+                <img src="./pngwing.com.png" alt="Ícone" id="fotoperfil" class="profile-pic">
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="./login.html">Login</a></li>
+                <li><a href="./register.html">Register</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      
+      <h2>Parques em São Paulo</h2>
+      
+      <main>
+        <section id="eventos">
+          <div class="maintexto" id="event-list"></div>
+        </section>
+      </main>
+    
+      <footer>
+        <p>Copyright &copy; 2024 Tudo em SP. Todos os direitos reservados.</p>
+      </footer>
+    
+      <script>
+
+        let foto = window.location.search;
+        document.getElementById("pagparques").href=`./parques.html${foto}`
+        document.getElementById("pagpracas").href=`./pracas.html${foto}`
+        document.getElementById("pageventos").href=`./eventos.html${foto}`
+        document.getElementById("pagaquario").href=`./aquario.html${foto}`
+        document.getElementById("pagshopping").href=`./shopping.html${foto}`
+        document.getElementById("pagsesc").href=`./sesc.html${foto}`
+        document.getElementById("pagzoologico").href=`./zoologico.html${foto}`
+        document.getElementById("pagindex").href=`./index.html${foto}`
+        
+        let fotoPerfil = foto.substring(6, foto.length);
+        document.getElementById("fotoperfil").src = fotoPerfil;
+      </script>
+      <script>
+        window.onload = function() {
+            loadParques();
+        };
+    </script>
+    <script src="./search.js"></script>
+    <script src="./teste.js"></script>
+
+
+
+</body>
+
+</html>
